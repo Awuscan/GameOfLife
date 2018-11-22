@@ -1,4 +1,4 @@
-#include <SFML/Graphics.hpp>
+﻿#include <SFML/Graphics.hpp>
 #include <iostream>
 #include "Board.h"
 
@@ -42,7 +42,7 @@ int main()
 		
 
 		plansza.nextStep();
-		std::cout << "nast�pna" << std::endl;
+		std::cout << "następna" << std::endl;
 		plansza.draw(window);
 
 		window.display();
