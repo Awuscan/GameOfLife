@@ -12,7 +12,6 @@ Board::~Board()
 void Board::initialize()
 {
 	int Y, X;
-
 	{
 		std::cout << "Podaj rozmiar horyzontalny: ";
 		std::cin >> X;
@@ -50,7 +49,7 @@ void Board::nextStep()
 					int a = i + c, b = j + d;
 					if (!(c == 0 && d == 0) && ((a >= 0 && a < sizeY) && (b >= 0 && b < sizeX)))
 					{
-						if (gridCopy[a][b].readState())
+						if (gridCopy[a][b].getState())
 						{
 							++alive;
 						}
@@ -96,7 +95,7 @@ bool Board::initialize(int Y, int X)
 		for (int i = 0; i < sizeY; i++) {
 			std::vector<Field> tmp;
 			for (int j = 0; j < sizeX; j++) {
-				Field field(j, i);
+				Field field(j, i, sizeField);
 				tmp.push_back(field);
 			}
 			grid.push_back(tmp);
@@ -108,6 +107,18 @@ bool Board::initialize(int Y, int X)
 
 void Board::fillOut()
 {
+	/*(shape.getGlobalBounds().contains(Mouse))
+	{
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+			if (shape.getFillColor() == color1) {
+				shape.setFillColor(color2);
+			}
+			else {
+				shape.setFillColor(color1);
+			}
+		}
+	}
+*/
 }
 
 void Board::randomize()
@@ -123,12 +134,22 @@ void Board::randomize()
 	{
 		randSeedV = rand() % sizeY;
 		randSeedH = rand() % sizeX;
-		if (!grid[randSeedV][randSeedH].readState())
+		if (!grid[randSeedV][randSeedH].getState())
 		{
 			grid[randSeedV][randSeedH].changeState(true);
 			n++;
 		}
 	}
+}
+
+int Board::getSizeX()
+{
+	return sizeX;
+}
+
+int Board::getSizeY()
+{
+	return sizeY;
 }
 
 void Board::copyGrid()

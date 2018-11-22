@@ -5,47 +5,65 @@
 int main()
 {
 	sf::ContextSettings settings;
-	settings.antialiasingLevel = 1;
+	settings.antialiasingLevel = 0;
 
 	Board plansza;
 
 	plansza.initialize();
 	plansza.randomize();
+
+	int y = plansza.getSizeY(), x = plansza.getSizeX();
+	int h = y * 6 + y - 1, w = x * 6 + x - 1;
+	int sH = sf::VideoMode::getDesktopMode().height, sW = sf::VideoMode::getDesktopMode().width;
+
 	
-	sf::RenderWindow window(sf::VideoMode(1600, 900), "Title", sf::Style::Default, settings);
+	sf::RenderWindow window(sf::VideoMode(w,h), "Gra w życie", sf::Style::Default, settings);
 	window.setFramerateLimit(5);
 	window.clear();
 
-	while (window.isOpen())
-	{
+	bool state = true;
+	int i = 0;
+
+	while (window.isOpen()) {
+
 		sf::Event event;
-		while (window.pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
+		while (window.pollEvent(event)) {
+			switch (event.type)
+			{
+			case sf::Event::Closed:
 				window.close();
-			
+				break;
+			case sf::Event::KeyPressed:
+				if (event.key.code == sf::Keyboard::Space) { //pauza
+					state = !state;
+				}else if (event.key.code == sf::Keyboard::Escape){ //zamknięcie
+					window.close();
+				}else if (event.key.code == sf::Keyboard::Enter){ //pauza i zmaiana ręczna stanu pól
+					if (state) {
+						state = !state;
+						plansza.fillOut();
+					}else {
+						state = !state;
+					}
+				}else if (event.key.code == sf::Keyboard::Right) {
+					if (state)
+						state = !state;
+					plansza.nextStep();
+					std::cout << i++ << std::endl;
+					plansza.draw(window);
+					window.display();
+					}
+				break;		
+			}	
 		}
 
-	
-	/*(shape.getGlobalBounds().contains(Mouse))
-		{
-			if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-				if (shape.getFillColor() == color1) {
-					shape.setFillColor(color2);
-				}
-				else {
-					shape.setFillColor(color1);
-				}
-			}
+		if (state) {
+			plansza.nextStep();
+			std::cout << i++ << std::endl;
+			plansza.draw(window);
+			window.display();
 		}
-	*/
-		
 
-		plansza.nextStep();
-		std::cout << "następna" << std::endl;
-		plansza.draw(window);
-
-		window.display();
 	}
 
 	return 0;
