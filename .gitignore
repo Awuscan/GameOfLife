@@ -21,6 +21,10 @@ bld/
 [Bb]in/
 [Oo]bj/
 [Ll]og/
+Project1/[Dd]ebug/
+Project1/[Dd]ebugPublic/
+Project1/[Rr]elease/
+Project1/[Rr]eleases/
 
 # Visual Studio 2015 cache/options directory
 .vs/
