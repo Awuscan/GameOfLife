@@ -1,3 +1,13 @@
-﻿  Board.cpp
-c:\users\mateusz\source\repos\project1\project1\board.cpp(115): warning C4244: "argument": konwersja z "time_t" do "unsigned int", możliwa utrata danych
-  Project1.vcxproj -> C:\Users\Mateusz\source\repos\Project1\Debug\Project1.exe
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: Katalog pośredni (Debug\) zawiera pliki udostępnione z innego projektu (Project1.vcxproj). Może to spowodować niepoprawne zachowanie podczas oczyszczania i ponownej kompilacji.
+  Board.cpp
+c:\users\mateusz\onedrive\prz\c++\project1\project1\board.cpp(115): warning C4244: "argument": konwersja z "time_t" do "unsigned int", możliwa utrata danych
+  Field.cpp
+c:\users\mateusz\onedrive\prz\c++\project1\project1\field.cpp(10): warning C4244: "argument": konwersja z "int" do "T", możliwa utrata danych
+          with
+          [
+              T=float
+          ]
+c:\users\mateusz\onedrive\prz\c++\project1\project1\field.cpp(14): warning C4244: "argument": konwersja z "int" do "float", możliwa utrata danych
+  main.cpp
+  Generowanie kodu...
+  Project1.vcxproj -> C:\Users\Mateusz\OneDrive\PRZ\C++\Project1\Debug\GameOfLife.exe

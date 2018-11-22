@@ -7,15 +7,14 @@ int main()
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 1;
 
-	sf::RenderWindow window(sf::VideoMode(1600, 900), "Title", sf::Style::Default, settings);
-	window.setFramerateLimit(5);
-
-
 	Board plansza;
 
 	plansza.initialize();
 	plansza.randomize();
 	
+	sf::RenderWindow window(sf::VideoMode(1600, 900), "Title", sf::Style::Default, settings);
+	window.setFramerateLimit(5);
+	window.clear();
 
 	while (window.isOpen())
 	{
@@ -40,7 +39,7 @@ int main()
 			}
 		}
 	*/
-		window.clear();
+		
 
 		plansza.nextStep();
 		std::cout << "nastêpna" << std::endl;
