@@ -1,2 +1,8 @@
 ﻿  main.cpp
-  Project1.vcxproj -> C:\Users\Mateusz\OneDrive\PRZ\C++\Project1\Debug\GameOfLife.exe
+c:\users\matti\source\repos\gameoflife-project\project1\main.cpp(28): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\matti\source\repos\gameoflife-project\project1\main.cpp(95): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+  Project1.vcxproj -> C:\Users\Matti\Source\Repos\GameOfLife-project\Debug\GameOfLife.exe

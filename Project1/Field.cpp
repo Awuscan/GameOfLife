@@ -8,8 +8,8 @@ Field::Field(int x, int y, int size)
 	Y = y;
 	state = false;
 	block.setSize(sf::Vector2f(size, size));
-	block.setOutlineColor(sf::Color::Black);
-	block.setOutlineThickness(0);
+	//block.setOutlineColor(sf::Color::Black);
+	//block.setOutlineThickness(0);
 	block.setFillColor(colorDead);
 	block.setPosition(size*X+X, size*Y+Y);
 }

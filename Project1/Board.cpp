@@ -1,4 +1,4 @@
-#include "Board.h"
+﻿#include "Board.h"
 
 Board::Board()
 {
@@ -129,6 +129,13 @@ void Board::randomize()
 
 	std::cout << "Podaj: ";
 	std::cin >> i;
+
+	while(i > sizeX*sizeY) {
+		std::cout << "Za dużo" << std::endl;
+		std::cout << "Podaj: ";
+		std::cin >> i;
+	}
+
 
 	while (n < i)
 	{
