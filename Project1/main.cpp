@@ -94,8 +94,8 @@ int main()
 
 		//window.setView(widok);
 
-		if (state) {
-			plansza.nextStep();
+		if (state) { //następny krok
+			plansza.nextStep(); 
 			//std::cout << i++ << std::endl;
 			plansza.draw(window);
 			window.display();
