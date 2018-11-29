@@ -13,7 +13,7 @@ public:
 	bool initialize(int Y, int X);
 	void draw(sf::RenderWindow& window); // rysuje plansze
 	void nextStep(); //oblicza nastepny krok
-	void fillOut(); //wype³nienie planszy przez u¿ytkopwnika
+	void fillOut(sf::RenderWindow& window); //wype³nienie planszy przez u¿ytkopwnika
 	void randomize(); // wype³nienie n pól na planszy losowo
 	int getSizeX(); //zwraca szerokoœæ planszy 
 	int getSizeY(); //zwraca wysokosæ planszy

@@ -37,36 +37,27 @@ void Board::nextStep()
 {
 	copyGrid();
 
-	for (int i = 0; i < sizeY; i++)
-	{
-		for (int j = 0; j < sizeX; j++)
-		{
+	for (int i = 0; i < sizeY; i++)	{
+		for (int j = 0; j < sizeX; j++)	{
 			int alive = 0;
-			for (int c = -1; c < 2; c++)
-			{
-				for (int d = -1; d < 2; d++)
-				{
+			for (int c = -1; c < 2; c++) {
+				for (int d = -1; d < 2; d++) {
 					int a = i + c, b = j + d;
-					if (!(c == 0 && d == 0) && ((a >= 0 && a < sizeY) && (b >= 0 && b < sizeX)))
-					{
-						if (gridCopy[a][b].getState())
-						{
+					if (!(c == 0 && d == 0) && ((a >= 0 && a < sizeY) && (b >= 0 && b < sizeX))) {
+						if (gridCopy[a][b].getState())						{
 							++alive;
 						}
 					}
 				}
 			}
 
-			if (alive < 2)
-			{
+			if (alive < 2) {
 				grid[i][j].changeState(false);
 			}
-			else if (alive == 3)
-			{
+			else if (alive == 3) {
 				grid[i][j].changeState(true);
 			}
-			else if (alive > 3)
-			{
+			else if (alive > 3)	{
 				grid[i][j].changeState(false);
 			}
 		}
@@ -105,20 +96,41 @@ bool Board::initialize(int Y, int X)
 	}
 }
 
-void Board::fillOut()
+void Board::fillOut(sf::RenderWindow& window)
 {
-	/*(shape.getGlobalBounds().contains(Mouse))
-	{
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-			if (shape.getFillColor() == color1) {
-				shape.setFillColor(color2);
+	sf::Vector2f posOnBoard;
+	sf::Vector2i posMouse;
+
+	while (window.isOpen()) {
+		sf::Event event;
+		while (window.pollEvent(event)) {
+			if (event.type == sf::Event::MouseButtonPressed) {
+				posMouse = sf::Mouse::getPosition(window);
+				posOnBoard = window.mapPixelToCoords(posMouse);
+				int x = (int)(posOnBoard.x) / (sizeField + 1);
+				int y = (int)(posOnBoard.y) / (sizeField + 1);
+				std::cout << "plansza " << posOnBoard.x << " " << posOnBoard.y << std::endl;
+				std::cout << "mysz " << posMouse.x << " " << posMouse.y << std::endl;
+				std::cout << "kliksz na objekt o poz: " << x << " " << y << std::endl;
+				if (grid[y][x].getState()) {
+					grid[y][x].changeState(false);
+				}
+				else {
+					grid[y][x].changeState(true);
+				}
+				draw(window);
+				window.display();
 			}
-			else {
-				shape.setFillColor(color1);
+			else if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Enter)) {
+				return;
+			}
+			else if(event.key.code == sf::Keyboard::F1){
+				randomize();
+				draw(window);
+				window.display();
 			}
 		}
 	}
-*/
 }
 
 void Board::randomize()
