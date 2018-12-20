@@ -1,5 +1,6 @@
 #pragma once
 #include "Board.h"
+#include <TGUI/TGUI.hpp>
 
 class Game
 {
@@ -9,11 +10,13 @@ public:
 	void start(); //inicjalizacja gry
 	void play(); //rozpoczêcie
 private:
+	bool state = false; //status gry(w toku/pauza)
+	int framerate = 30;
+	const int fieldSize = 6; //rozmiar pola
 	sf::RenderWindow window; //objekt okna
 	sf::View view; //objekt widoku w oknie
-	bool state; //status gry(w toku/pauza)
-	int fieldSize = 6;
 	Board board{ fieldSize }; //objekt planszy
-	void event(sf::Event& event); //obs³uga zdarzeñ u¿ytkownika
+	void menu(); //wyœwietla menu startowe
+
 };
 

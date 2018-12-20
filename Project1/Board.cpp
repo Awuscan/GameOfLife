@@ -10,18 +10,6 @@ Board::~Board()
 {
 }
 
-void Board::initialize()
-{
-	int Y, X;
-	{
-		std::cout << "Podaj rozmiar horyzontalny: ";
-		std::cin >> X;
-
-		std::cout << "Podaj rozmiar wertykalny: ";
-		std::cin >> Y;
-	} while (this->initialize(Y, X) == false);
-
-}
 
 void Board::draw(sf::RenderWindow & window)
 {
@@ -36,21 +24,17 @@ void Board::draw(sf::RenderWindow & window)
 
 void Board::nextStep()
 {
-	copyGrid();
-	int alive;
 
-	for (int i = 1; i < sizeY+1; i++)	{
-		for (int j = 1; j < sizeX+1; j++)	{
+	copyGrid();
+	int alive,i,j,n;
+	int neighbours[8][2] = {{-1,-1},{-1,0},{-1,1},{0,-1},{0,1},{1,-1},{1,0},{1,1}};
+
+	for (i = 1; i < sizeY+1; i++)	{
+		for (j = 1; j < sizeX+1; j++)	{
 			alive = 0;
-			for (int c = -1; c < 2; c++) {
-				for (int d = -1; d < 2; d++) {
-					int a = i + c, b = j + d;
-			//		if (!(c == 0 && d == 0) && ((a >= 0 && a < sizeY) && (b >= 0 && b < sizeX))) {
-					if (!(c == 0 && d == 0)){
-						if (gridCopy[a][b].getState()) {
-							++alive;
-						}
-					}
+			for (n = 0; n < 8; n++) {
+				if (gridCopy[i + neighbours[n][0]][j + neighbours[n][1]].getState()) {
+					++alive;
 				}
 			}
 
@@ -83,8 +67,6 @@ bool Board::initialize(int Y, int X)
 		std::cout << std::endl;
 		std::cout << "Stworzono plansze." << std::endl;
 		std::cout << std::endl;
-
-
 
 		for (int i = 0; i < sizeY+2; i++) {
 			std::vector<Field> tmp;
@@ -136,8 +118,15 @@ void Board::fillOut(sf::RenderWindow& window,sf::View& view)
 				else if (event.key.code == sf::Keyboard::Enter) {
 					return;
 				}
+				else if (event.key.code == sf::Keyboard::R) {
+					this->randomize();
+					draw(window);
+					window.display();
+				}
 				window.setView(view);
 				window.clear();
+				draw(window);
+				window.display();
 				break;
 			case sf::Event::Resized: //obsługuje zmiane rozmiaru okna
 				view.setSize(event.size.width, event.size.height);
@@ -162,14 +151,8 @@ void Board::fillOut(sf::RenderWindow& window,sf::View& view)
 				}
 				draw(window);
 				window.display();
-			}
-			 
-			
-			//else if(event.key.code == sf::Keyboard::F1){
-			//	randomize();
-			//	draw(window);
-			//	window.display();
-			//}
+				break;
+			}	 
 		}
 	}
 }
@@ -178,26 +161,20 @@ void Board::randomize()
 {
 	srand(time(NULL));
 	int randSeedV, randSeedH;
-	int i,n = 0;
+	int i = 0, j = 0, n;
 
-	std::cout << "Podaj: ";
-	std::cin >> i;
-
-	while(i > sizeX*sizeY) {
-		std::cout << "Za dużo" << std::endl;
-		std::cout << "Podaj: ";
-		std::cin >> i;
-	}
-
-	while (n < i)
+	n = rand() % (sizeX * sizeY)/2 + 1;
+	while (j < n)
 	{
-		randSeedV = rand() % sizeY +1;
-		randSeedH = rand() % sizeX +1;
+		i++;
+		randSeedV = rand() % sizeY + 1;
+		randSeedH = rand() % sizeX + 1;
 		if (!grid[randSeedV][randSeedH].getState())
 		{
 			grid[randSeedV][randSeedH].changeState(true);
-			n++;
+			j++;
 		}
+		if (i > 10000) { return; }
 	}
 }
 
