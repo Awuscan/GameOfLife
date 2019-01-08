@@ -2,16 +2,11 @@
 
 
 
-Field::Field(int x, int y, int size)
+Field::Field(int x, int y, int size): coordX(x), coordY(y), state(false)
 {
-	X = x;
-	Y = y;
-	state = false;
 	block.setSize(sf::Vector2f(size, size));
-	//block.setOutlineColor(sf::Color::Black);
-	//block.setOutlineThickness(0);
 	block.setFillColor(colorDead);
-	block.setPosition(size*X+X, size*Y+Y);
+	block.setPosition(size*coordX+ coordX, size*coordY+ coordY);
 }
 
 
@@ -24,7 +19,9 @@ void Field::draw(sf::RenderWindow& window)
 	window.draw(block);
 }
 
-void Field::changeState(bool newState)
+
+
+Field & Field::operator=(const bool & newState)
 {
 	state = newState;
 	if (state) {
@@ -39,10 +36,5 @@ void Field::changeState(bool newState)
 			block.setFillColor(colorDead);
 		}
 	}
-
-}
-
-bool Field::getState()
-{
-	return state;
+	return *this;
 }

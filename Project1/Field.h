@@ -7,15 +7,17 @@ public:
 	Field(int x,int y,int size);
 	~Field();
 	void draw(sf::RenderWindow& window); //rysuje pole
-	void changeState(bool newState); //zmienia stan pola
-	bool getState(); //zwraca stan pola
+	operator bool() const { return state; } 
+	bool operator!() const { return !state; }
+	Field &operator=(const bool &newState);
 private:
-	sf::RectangleShape block;  //objekt prostokata 
+	sf::RectangleShape block;  //obiekt prostokata 
 	bool state; //stan pola
 	bool wasAlive = false; //czy pole ¿y³o wczeœniej
-	int X, Y; //koordynaty pola na planszy
-	sf::Color colorDead{ 100, 100, 100 }; //kolor pola gdy jest martwe
-	sf::Color colorAlive{ 255, 255, 255 }; //kolor pola gdy jest ¿ywe
-	sf::Color colorWasAlive{ 130, 33, 168 }; //kolor pola gdy jest martwe, ale ¿y³o wczeœniej
+	int coordX, coordY; //koordynaty pola na planszy
+	sf::Color colorDead{ 65, 65, 65 }; //kolor pola gdy jest martwe
+	sf::Color colorAlive{ 239, 239, 239 }; //kolor pola gdy jest ¿ywe
+	sf::Color colorWasAlive{ 178, 33,82 }; //kolor pola gdy jest martwe, ale ¿y³o wczeœniej
+	//sf::Color colorWasAlive{ 130, 33, 168 }; //kolor pola gdy jest martwe, ale ¿y³o wczeœniej
 };
 
