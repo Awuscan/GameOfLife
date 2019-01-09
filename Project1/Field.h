@@ -6,9 +6,9 @@ class Field
 public:
 	Field(int x,int y,int size);
 	~Field();
-	void draw(sf::RenderWindow& window); //rysuje pole
-	operator bool() const { return state; } 
-	bool operator!() const { return !state; }
+	void draw(sf::RenderWindow& window) { window.draw(block); }; //rysuje pole
+	operator bool() const { return state; };
+	bool operator!() const { return !state; };
 	Field &operator=(const bool &newState);
 private:
 	sf::RectangleShape block;  //obiekt prostokata 
@@ -18,6 +18,4 @@ private:
 	sf::Color colorDead{ 65, 65, 65 }; //kolor pola gdy jest martwe
 	sf::Color colorAlive{ 239, 239, 239 }; //kolor pola gdy jest ¿ywe
 	sf::Color colorWasAlive{ 178, 33,82 }; //kolor pola gdy jest martwe, ale ¿y³o wczeœniej
-	//sf::Color colorWasAlive{ 130, 33, 168 }; //kolor pola gdy jest martwe, ale ¿y³o wczeœniej
 };
-

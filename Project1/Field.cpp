@@ -14,13 +14,6 @@ Field::~Field()
 {
 }
 
-void Field::draw(sf::RenderWindow& window)
-{
-	window.draw(block);
-}
-
-
-
 Field & Field::operator=(const bool & newState)
 {
 	state = newState;
