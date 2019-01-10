@@ -7,9 +7,11 @@ public:
 	Field(int x,int y,int size);
 	~Field();
 	void draw(sf::RenderWindow& window) { window.draw(block); }; //rysuje pole
+	void reset();
 	operator bool() const { return state; };
 	bool operator!() const { return !state; };
-	Field &operator=(const bool &newState);
+	Field &operator=(const bool& newState);
+	Field &operator=(const Field& p);
 private:
 	sf::RectangleShape block;  //obiekt prostokata 
 	bool state; //stan pola

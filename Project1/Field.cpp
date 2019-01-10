@@ -14,6 +14,13 @@ Field::~Field()
 {
 }
 
+void Field::reset()
+{
+	block.setFillColor(colorDead);
+	wasAlive = false;
+	state = false;
+}
+
 Field & Field::operator=(const bool & newState)
 {
 	state = newState;
@@ -29,5 +36,11 @@ Field & Field::operator=(const bool & newState)
 			block.setFillColor(colorDead);
 		}
 	}
+	return *this;
+}
+
+Field & Field::operator=(const Field & p)
+{
+	state = p;
 	return *this;
 }

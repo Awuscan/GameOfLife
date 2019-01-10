@@ -1,6 +1,6 @@
 ﻿#include "Board.h"
 
-Board::Board(int size) : fieldSize(size), generation(0)
+Board::Board(int size) : fieldSize(size)
 {
 }
 
@@ -25,8 +25,24 @@ void Board::nextStep()
 {
 	generation++;
 	copyGrid();
-	int alive,i,j,n;
-	int neighbours[8][2] = {{-1,-1},{-1,0},{-1,1},{0,-1},{0,1},{1,-1},{1,0},{1,1}};
+	int alive, i, j, n;
+	int neighbours[8][2] = { {-1,-1},{-1,0},{-1,1},{0,-1},{0,1},{1,-1},{1,0},{1,1} };
+
+	if (wrap) {
+		for (i = 1; i < sizeY + 1; i++) {
+			gridCopy[i][0] = gridCopy[i][sizeX];
+			gridCopy[i][sizeX+1] = gridCopy[i][1];
+		}
+
+		for (i = 1; i < sizeX + 1; i++) {
+			gridCopy[0][i] = gridCopy[sizeY][i];
+			gridCopy[sizeY+1][i] = gridCopy[1][i];
+		}
+		gridCopy[0][0] = gridCopy[sizeY][sizeX];
+		gridCopy[sizeY+1][sizeX+1] = gridCopy[1][1];
+		gridCopy[0][sizeX + 1] = gridCopy[sizeY][1];
+		gridCopy[sizeY + 1][0] = gridCopy[1][sizeX];
+	}
 
 	for (i = 1; i < sizeY+1; i++)	{
 		for (j = 1; j < sizeX+1; j++)	{
@@ -108,6 +124,51 @@ void Board::randomize(int n)
 				j++;
 			}
 			if (i > 250000) { return; }
+		}
+	}
+}
+
+void Board::patterns(int pattern, int x, int y)
+{
+	int n = 0;
+	switch (pattern) {
+	case 1:
+		if (sizeX < 38 || sizeY < 11) break;
+		for (int j = 0; j < 11; j++) {
+			for (int i = 0; i < 38; i++) {
+				grid[y + j][x + i] = tab[n];
+				n++;
+			}
+		}
+		break;
+	case 2:
+		if (sizeX < 35 || sizeY < 11) break;
+		for (int j = 0; j < 11; j++) {
+			for (int i = 0; i < 35; i++) {
+				grid[y + j][x + i] = tab2[n];
+				n++;
+			}
+		}
+	case 3:
+		if (sizeX < 13 || sizeY < 13) break;
+		for (int j = 0; j < 13; j++) {
+			for (int i = 0; i < 13; i++) {
+				grid[y + j][x + i] = tab3[n];
+				n++;
+			}
+		}
+		break;
+	}
+}
+
+void Board::reset()
+{
+	generation = 0;
+	for (int i = 1; i < sizeY + 1; i++)
+	{
+		for (int j = 1; j < sizeX + 1; j++)
+		{
+			grid[i][j].reset();
 		}
 	}
 }

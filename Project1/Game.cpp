@@ -39,13 +39,20 @@ void Game::start()
 		windowWidth -= 100;
 		windowHeight -= 200;
 	}
-	else if (w < 410 || h < 200 ) {
-		windowWidth = 410;
+	else if (h < 200 ) {
 		windowHeight = 410;
 	}
 	else {
-		windowWidth = w;
 		windowHeight = h;
+	}	
+	if (w > (windowWidth - 100)) {
+		windowWidth -= 100;
+	}
+	else if (w < 410 || h < 200 ) {
+		windowWidth = 410;
+	}
+	else {
+		windowWidth = w;
 	}
 
 	windowHeight += 100;
@@ -75,8 +82,10 @@ void Game::start()
 
 void Game::play()
 {
+	sf::Clock clock;
+	float lastTime = 0;
+
 	tgui::Gui gui(window);
-	tgui::Theme theme{ "themes/Black.txt" };
 	gui.setView(view);
 	loadMenu(gui);
 
@@ -85,6 +94,11 @@ void Game::play()
 	
 	sf::Event event;
 	while (window.isOpen()) {
+
+		float currentTime = clock.restart().asSeconds();
+		float fps = 1.f / (currentTime - lastTime);
+		lastTime = currentTime;
+
 		while (window.pollEvent(event)) {
 			gui.handleEvent(event);
 			switch (event.type) {
@@ -111,8 +125,13 @@ void Game::play()
 				posOnBoard = window.mapPixelToCoords(posMouse);
 				int x = (int)(posOnBoard.x) / (fieldSize + 1);
 				int y = (int)(posOnBoard.y) / (fieldSize + 1);
-				if (x > 0 && x <= board.getSizeX() && y > 0 && y <= board.getSizeY() && !state) {
-					board.changeFieldState(x, y);
+				if (pattern != 0) {
+					board.patterns(pattern, x, y);
+					pattern = 0;
+				}
+				else {
+					if (x > 0 && x <= board.getSizeX() && y > 0 && y <= board.getSizeY())
+						board.changeFieldState(x, y);
 				}
 				break;
 			}
@@ -120,6 +139,7 @@ void Game::play()
 		
 		if (state) { //następny krok
 			board.nextStep();
+			gen->setText(std::to_string(board.getGen()) + "\n " + std::to_string((int)(1 / lastTime)));
 		}
 	
 		window.clear();
@@ -153,6 +173,7 @@ void Game::menu()
 
 	auto sliderWidth = tgui::Slider::copy(sliderHeight);
 	sliderWidth->setPosition({ "16%", "45%" });
+	sliderWidth->setValue(180);
 	gui.add(sliderWidth);
 
 	auto labelWidth = tgui::Label::copy(labelHeight);
@@ -218,22 +239,22 @@ void Game::loadMenu(tgui::Gui &gui)
 	panel->setPosition({ x,y-50 });
 	gui.add(panel);
 
-	auto button = tgui::Button::create("");
-	button->setRenderer(theme.getRenderer("Button"));
-	button->setSize({ 30, 30 });
-	button->setPosition({ 10 + x, y - 40 });	
-	gui.add(button);
-
 	auto patterns = tgui::ComboBox::create();
 	patterns->setRenderer(theme.getRenderer("comboBox"));
 	patterns->setSize(200, 30);
 	patterns->setPosition(50 + x, y - 40);
-	patterns->addItem("Glider");
-	patterns->addItem("Lightweight spaceship");
-	patterns->addItem("Middleweight spaceship");
-	patterns->addItem("Heavyweight spaceship");
-	patterns->setSelectedItem("Glider");
+	patterns->addItem("Gospel Glider Gun", "1");
+	patterns->addItem("Garden of Eden 1", "2");
+	patterns->addItem("Flower of Eden 5", "3");
+	patterns->setSelectedItem("Gospel Glider Gun");
 	gui.add(patterns);
+
+	auto button = tgui::Button::create("");
+	button->setRenderer(theme.getRenderer("Button"));
+	button->setSize({ 30, 30 });
+	button->setPosition({ 10 + x, y - 40 });
+	button->connect("pressed", &Game::makePattern, this, patterns);
+	gui.add(button);
 
 	auto randNumber = tgui::EditBox::create();
 	randNumber->setRenderer(theme.getRenderer("EditBox"));
@@ -246,8 +267,18 @@ void Game::loadMenu(tgui::Gui &gui)
 	rand->setRenderer(theme.getRenderer("Button"));
 	rand->setSize({ 80, 30 });
 	rand->setPosition({ 320 + x, y - 40 });
-	gui.add(rand);
 	rand->connect("pressed", &Game::randomize, this, randNumber);
+	gui.add(rand);
+
+	auto speed = tgui::Slider::create();
+	speed->setRenderer(theme.getRenderer("Slider"));
+	speed->setSize({ 120, 16 });
+	speed->setPosition({ 70 + x, y + 12 });
+	speed->setMinimum(1);
+	speed->setMaximum(120);
+	speed->setValue(framerate);
+	speed->connect("ValueChanged", &Game::playspeed, this, speed);
+	gui.add(speed);
 
 	auto play = tgui::BitmapButton::create();
 	play->setRenderer(theme.getRenderer("Button"));
@@ -255,18 +286,8 @@ void Game::loadMenu(tgui::Gui &gui)
 	play->setPosition({ 10 + x, y });
 	play->setImage("themes/icons/play.png");
 	play->setImageScaling(0.8);
-	play->connect("pressed", &Game::playpause, this, play);
+	play->connect("pressed", &Game::playpause, this, play, speed);
 	gui.add(play);
-
-	auto speed = tgui::Slider::create();
-	speed->setRenderer(theme.getRenderer("Slider"));
-	speed->setSize({ 120, 16 });
-	speed->setPosition({ 70 + x, y+12 });
-	speed->setMinimum(1);
-	speed->setMaximum(120);
-	speed->setValue(framerate);
-	speed->connect("ValueChanged", &Game::playspeed, this, speed);
-	gui.add(speed);
 
 	auto next = tgui::BitmapButton::create();
 	next->setRenderer(theme.getRenderer("Button"));
@@ -274,9 +295,23 @@ void Game::loadMenu(tgui::Gui &gui)
 	next->setPosition({ 210 + x, y  });
 	next->setImage("themes/icons/next.png");
 	next->setImageScaling(0.8);
-	next->connect("pressed", &Game::playnext, this, play);
+	next->connect("pressed", &Game::playnext, this, play, speed);
 	gui.add(next);
 
+	auto reset = tgui::Button::create("Reset");
+	reset->setRenderer(theme.getRenderer("Button"));
+	reset->setSize({ 50, 40 });
+	reset->setPosition({ 260 + x, y });
+	reset->connect("pressed", &Game::reset, this, play, speed);
+	gui.add(reset);
+
+	gen = tgui::Label::create();
+	gen->setTextSize(16);
+	gen->setPosition({ 320 + x, y});
+	gen->setText(std::to_string(board.getGen()));
+	gen->setHorizontalAlignment(tgui::Label::HorizontalAlignment::Right);
+	gen->setSize({ 80,40 });
+	gui.add(gen);
 }
 
 void Game::randomize(tgui::EditBox::Ptr number)
@@ -288,15 +323,19 @@ void Game::randomize(tgui::EditBox::Ptr number)
 	if(x!=NAN)board.randomize(x);
 }
 
-void Game::playpause(tgui::BitmapButton::Ptr button)
+void Game::playpause(tgui::BitmapButton::Ptr play, tgui::Slider::Ptr speed)
 {
 	if(state){
 		state = false;
-		button->setImage("themes/icons/play.png");
+		play->setImage("themes/icons/play.png");
+		framerate = 10;
+		speed->setValue(10);
 	}
 	else {
 		state = true;
-		button->setImage("themes/icons/pause.png");
+		play->setImage("themes/icons/pause.png");
+		framerate = 10;
+		speed->setValue(10);
 	}
 }
 
@@ -306,9 +345,29 @@ void Game::playspeed(tgui::Slider::Ptr slider)
 	window.setFramerateLimit(framerate);
 }
 
-void Game::playnext(tgui::BitmapButton::Ptr button)
+void Game::playnext(tgui::BitmapButton::Ptr play, tgui::Slider::Ptr speed)
 {
 	state = false;
 	board.nextStep();
-	button->setImage("themes/icons/play.png");
+	play->setImage("themes/icons/play.png");
+	framerate = 10;
+	speed->setValue(10);
+}
+
+void Game::makePattern(tgui::ComboBox::Ptr patterns)
+{
+	sf::String name = patterns->getSelectedItemId();
+	if (name == "1") { pattern = 1; }
+	if (name == "2") { pattern = 2; }
+	if (name == "3") { pattern = 3; }
+}
+
+void Game::reset(tgui::BitmapButton::Ptr play, tgui::Slider::Ptr speed)
+{
+	play->setImage("themes/icons/play.png");
+	board.reset();
+	gen->setText("0");
+	state = false;
+	framerate = 10;
+	speed->setValue(10);
 }
