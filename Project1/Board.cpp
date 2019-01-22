@@ -76,23 +76,10 @@ void Board::changeFieldState(int x, int y)
 	}
 }
 
-bool Board::initialize(int Y, int X)
+void Board::initialize(int Y, int X)
 {
-	if (X < 1 || Y < 1)
-	{
-		std::cout << std::endl;
-		std::cout << "Niepoprawne dane!" << std::endl;
-		std::cout << std::endl;
-		return false;
-	}
-	else {
 		sizeX = X;
 		sizeY = Y;
-
-		std::cout << std::endl;
-		std::cout << "Stworzono plansze." << std::endl;
-		std::cout << std::endl;
-
 		for (int i = 0; i < sizeY+2; i++) {
 			std::vector<Field> tmp;
 			for (int j = 0; j < sizeX+2; j++) {
@@ -101,9 +88,6 @@ bool Board::initialize(int Y, int X)
 			}
 			grid.push_back(tmp);
 		}
-
-		return true;
-	}
 }
 
 void Board::randomize(int n)
@@ -118,8 +102,7 @@ void Board::randomize(int n)
 			i++;
 			randSeedV = rand() % sizeY + 1;
 			randSeedH = rand() % sizeX + 1;
-			if (!grid[randSeedV][randSeedH])
-			{
+			if (!grid[randSeedV][randSeedH]){
 				grid[randSeedV][randSeedH] = true;
 				j++;
 			}
@@ -149,6 +132,7 @@ void Board::patterns(int pattern, int x, int y)
 				n++;
 			}
 		}
+		break;
 	case 3:
 		if (sizeX < 13 || sizeY < 13) break;
 		for (int j = 0; j < 13; j++) {
@@ -164,10 +148,8 @@ void Board::patterns(int pattern, int x, int y)
 void Board::reset()
 {
 	generation = 0;
-	for (int i = 1; i < sizeY + 1; i++)
-	{
-		for (int j = 1; j < sizeX + 1; j++)
-		{
+	for (int i = 1; i < sizeY + 1; i++) {
+		for (int j = 1; j < sizeX + 1; j++) {
 			grid[i][j].reset();
 		}
 	}

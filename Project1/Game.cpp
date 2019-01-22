@@ -11,10 +11,7 @@ Game::Game()
 	sf::Image icon;
 	icon.loadFromFile("icon.png");
 	window.setIcon(64, 64, icon.getPixelsPtr());
-
-	
 }
-
 
 Game::~Game()
 {
@@ -38,20 +35,16 @@ void Game::start()
 	if (w > (windowWidth - 100) || h > (windowHeight - 200)) {
 		windowWidth -= 100;
 		windowHeight -= 200;
-	}
-	else if (h < 200 ) {
+	}else if (h < 200 ) {
 		windowHeight = 410;
-	}
-	else {
+	}else {
 		windowHeight = h;
 	}	
 	if (w > (windowWidth - 100)) {
 		windowWidth -= 100;
-	}
-	else if (w < 410 || h < 200 ) {
+	}else if (w < 410 || h < 200 ) {
 		windowWidth = 410;
-	}
-	else {
+	}else {
 		windowWidth = w;
 	}
 
@@ -128,8 +121,7 @@ void Game::play()
 				if (pattern != 0) {
 					board.patterns(pattern, x, y);
 					pattern = 0;
-				}
-				else {
+				}else {
 					if (x > 0 && x <= board.getSizeX() && y > 0 && y <= board.getSizeY())
 						board.changeFieldState(x, y);
 				}
@@ -139,9 +131,9 @@ void Game::play()
 		
 		if (state) { //następny krok
 			board.nextStep();
-			gen->setText(std::to_string(board.getGen()) + "\n " + std::to_string((int)(1 / lastTime)));
 		}
-	
+		gen->setText(std::to_string(board.getGen()) + "\n " + std::to_string((int)(1 / lastTime)));
+
 		window.clear();
 		board.draw(window);
 		gui.draw();
@@ -195,13 +187,11 @@ void Game::menu()
 		labelWidth->setText("Board Width: " + std::to_string(x));
 
 		sf::Event event;
-		while (window.pollEvent(event))
-		{
+		while (window.pollEvent(event))	{
 			gui.handleEvent(event);
 			if (event.type == sf::Event::Closed) {
 				window.close();
-			}
-			else if (event.type == sf::Event::MouseButtonReleased) {
+			}else if (event.type == sf::Event::MouseButtonReleased) {
 				sf::Vector2i posMouse = sf::Mouse::getPosition(window);
 				sf::Vector2f pos = sf::Vector2f(posMouse);
 				if (button->mouseOnWidget(pos)) {
@@ -330,8 +320,7 @@ void Game::playpause(tgui::BitmapButton::Ptr play, tgui::Slider::Ptr speed)
 		play->setImage("themes/icons/play.png");
 		framerate = 10;
 		speed->setValue(10);
-	}
-	else {
+	}else {
 		state = true;
 		play->setImage("themes/icons/pause.png");
 		framerate = 10;
