@@ -27,12 +27,10 @@ Field & Field::operator=(const bool & newState)
 	if (state) {
 		block.setFillColor(colorAlive);
 		wasAlive = true;
-	}
-	else {
+	}else {
 		if (wasAlive) {
 			block.setFillColor(colorWasAlive);
-		}
-		else {
+		}else {
 			block.setFillColor(colorDead);
 		}
 	}
