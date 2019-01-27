@@ -8,7 +8,7 @@ class Board
 public:
 	Board(int size);
 	~Board();
-	bool initialize(int Y, int X); //tworzy plansze o podanych rozmiarze
+	void initialize(int Y, int X); //tworzy plansze o podanych rozmiarze
 	void draw(sf::RenderWindow& window); // rysuje plansze
 	void nextStep(); //oblicza nastepny krok
 	void changeFieldState(int x, int y); //zmienia stan wybranego pola
