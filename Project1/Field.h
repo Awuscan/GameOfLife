@@ -11,7 +11,7 @@ public:
 	operator bool() const { return state; };
 	bool operator!() const { return !state; };
 	Field &operator=(const bool& newState);
-	Field &operator=(const Field& p);
+	bool operator=(const Field& p);
 private:
 	sf::RectangleShape block;  //obiekt prostokata 
 	bool state; //stan pola

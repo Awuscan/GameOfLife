@@ -112,12 +112,17 @@ void Game::play()
 				else if (event.key.code == sf::Keyboard::Escape) { //zamyka okno
 					window.close();
 				}
-				else if (event.key.code == sf::Keyboard::A) {view.move(-109.f, 0.f);} //przesuwa widok w prawo
-				else if (event.key.code == sf::Keyboard::W) {view.move(0.f, -109.f);} //przesuwa widok w górę
-				else if (event.key.code == sf::Keyboard::D) {view.move(109.f, 0.f);} //przesuwa widok w lewo
-				else if (event.key.code == sf::Keyboard::S) {view.move(0.f, 109.f);} //przesuwa widok w dół
-				else if (event.key.code == sf::Keyboard::E) {view.zoom(8 / 4.f);} //powiększa widok 2x
-				else if (event.key.code == sf::Keyboard::Q) {view.zoom(2 / 4.f);} //zmniejsza widok 2x
+				else if (event.key.code == sf::Keyboard::F1) { pattern = 1;	}
+				else if (event.key.code == sf::Keyboard::F2) { pattern = 2;	}
+				else if (event.key.code == sf::Keyboard::F3) { pattern = 3;	}
+				else if (event.key.code == sf::Keyboard::F4) { pattern = 4;	}
+				else if (event.key.code == sf::Keyboard::F5) { pattern = 5;	}
+				else if (event.key.code == sf::Keyboard::A) { view.move(-109.f, 0.f); }	//przesuwa widok w prawo
+				else if (event.key.code == sf::Keyboard::W) { view.move(0.f, -109.f); }	//przesuwa widok w górę
+				else if (event.key.code == sf::Keyboard::D) { view.move(109.f, 0.f); }	//przesuwa widok w lewo
+				else if (event.key.code == sf::Keyboard::S) { view.move(0.f, 109.f); }	//przesuwa widok w dół
+				else if (event.key.code == sf::Keyboard::E) { view.zoom(8 / 4.f); }		//powiększa widok 2x
+				else if (event.key.code == sf::Keyboard::Q) { view.zoom(2 / 4.f); }		//zmniejsza widok 2x
 				window.setView(view);
 				break;
 			case sf::Event::MouseButtonPressed: 
@@ -246,6 +251,8 @@ void Game::loadMenu(tgui::Gui &gui)
 	patterns->addItem("Gospel Glider Gun", "1");
 	patterns->addItem("Garden of Eden 1", "2");
 	patterns->addItem("Flower of Eden 5", "3");
+	patterns->addItem("Own Pattern 1", "4");
+	patterns->addItem("Own Pattern 2", "5");
 	patterns->setSelectedItem("Gospel Glider Gun");
 	gui.add(patterns);
 
@@ -351,15 +358,14 @@ void Game::playnext(tgui::BitmapButton::Ptr play, tgui::Slider::Ptr speed)
 	board.nextStep();
 	play->setImage("themes/icons/play.png");
 	framerate = 10;
+	gen->setText(std::to_string(board.getGen()) + "\n ");
 	speed->setValue(10);
 }
 
 void Game::makePattern(tgui::ComboBox::Ptr patterns)
 {
-	sf::String name = patterns->getSelectedItemId();
-	if (name == "1") { pattern = 1; }
-	if (name == "2") { pattern = 2; }
-	if (name == "3") { pattern = 3; }
+	std::string name = patterns->getSelectedItemId();
+	pattern = std::stoi(name);
 }
 
 void Game::reset(tgui::BitmapButton::Ptr play, tgui::Slider::Ptr speed)

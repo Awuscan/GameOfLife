@@ -39,8 +39,8 @@ Field & Field::operator=(const bool & newState)
 	return *this;
 }
 
-Field & Field::operator=(const Field & p)
+bool Field::operator=(const Field & p)
 {
 	state = p;
-	return *this;
+	return state;
 }
