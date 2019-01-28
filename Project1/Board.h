@@ -26,4 +26,9 @@ private:
 	std::vector<std::vector<Field>> grid; //pola planszy
 	std::vector<std::vector<Field>> gridCopy; //kopia pól planszy dla wyznaczania nastêpnej generacji
 	void copyGrid() {gridCopy = grid;}; //kopiuje plansze grid do gridCopy
+	static const int tab[418];
+	static const int tab2[396];
+	static const int tab3[169];
+	static const int tab4[126];
+	static const int tab5[143];
 };
